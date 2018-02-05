@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-router.get("/",function(req,res){
+router.get("/",function(req,res, next){
   const result = [
     {
       user: 'a'
@@ -11,6 +11,7 @@ router.get("/",function(req,res){
     }
   ]
   res.json({ result: result });
+
 });
 
 router.post("/add",function(req,res){
