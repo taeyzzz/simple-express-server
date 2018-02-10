@@ -1,3 +1,4 @@
+const path = require('path')
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors')
@@ -16,8 +17,9 @@ const errorHandler = (err, req, res, next) => {
 app.use(cors())
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(morgan('common'))
+app.use(morgan('dev'))
 
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.use("/user", userRouter);
 app.use("/product", productRouter);

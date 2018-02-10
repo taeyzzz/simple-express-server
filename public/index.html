@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Upload File</title>
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src='./flow.min.js'></script>
+</head>
+
+<body>
+  <form method='post' action='#' enctype='multipart/form-data'>
+    <input name='photo' type='file' id='file'>
+    <input type='button' value='Upload' id='uploadFile'>
+    <input type='button' value='Cancel' id='cancel'>
+  </form>
+  <script>
+    let uploadId = null
+    let options = {
+      target: 'http://localhost:5555/product/upload',
+      chunkSize: 5 * 1024 * 1024,
+      forceChunkSize: true,
+      testChunks: false,
+      simultaneousUploads: 1,
+      chunkRetryInterval: 1000,
+      maxChunkRetries: 0,
+      query: {
+        filename: "taey.png",
+      }
+    }
+    let file
+    let flow = new Flow(options)
+    flow.on('fileProgress', function (file, chunk) {
+      console.log('ON CHUNK')
+      console.log(file.progress());
+      let res = JSON.parse(chunk.xhr.response)
+      uploadId = res.uploadId
+    });
+    flow.on('fileSuccess', function (file, message) {
+      flow.removeFile(file)
+      uploadId = null
+    });
+    $('#cancel').click((e) => {
+      if(uploadId) {
+        let http = new XMLHttpRequest()
+        http.open('POST', 'http://localhost:5555/', true)
+        http.setRequestHeader('Authorization', options.headers.Authorization)
+        http.setRequestHeader('Content-Type', 'application/json')
+        http.send(JSON.stringify({ uploadId }))
+        flow.cancel()
+      }
+    })
+    $('#uploadFile').click((e) => {
+      file = $('#file')[0].files[0]
+      console.log(file);
+      flow.addFile(file)
+      flow.upload()
+      $('#file').val('')
+    })
+  </script>
+</body>
+
+</html>
