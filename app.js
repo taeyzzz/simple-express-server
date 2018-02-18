@@ -5,6 +5,17 @@ var cors = require('cors')
 var morgan = require('morgan')
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+io.on('connection', function(client) {
+    console.log('Client connected...');
+
+    client.on('join', function(data) {
+        console.log(data);
+    });
+});
+
 
 var userRouter = require('./router/user')
 var productRouter = require('./router/product')
