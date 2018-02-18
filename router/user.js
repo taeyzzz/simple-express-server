@@ -1,7 +1,35 @@
 var express = require('express');
 var nodeMailer = require('nodemailer');
+var jwt = require('jsonwebtoken');
 var router = express.Router();
 
+const admin = {
+  id: 'admin',
+  password: 123456
+}
+
+const authentication = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const user = jwt.verify(token, 'secret', function(err, decode){
+    if(err) next(err)
+    req.data = decode
+    next()
+  })
+}
+
+router.get("/login",function(req,res, next){
+  const token = jwt.sign(admin, 'secret', { expiresIn: 30 })
+  res.json({
+    user: admin ,
+    token: token
+  });
+
+});
+
+router.get("/decode",authentication, function(req,res, next){
+  res.json(req.data)
+
+});
 
 router.get("/",function(req,res, next){
   const result = [
