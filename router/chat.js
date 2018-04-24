@@ -19,5 +19,22 @@ router.post("/login",function(req,res){
   res.json({ userList: activeUser });
 });
 
+router.post("/send-message", (req, res) => {
+  const userName = req.body.userName
+  const inCommingTxt = req.body.messageTxt
+  req.serverSocketIO.emit('update-chat-list', {
+    data: {
+      inCommingTxt,
+      userName
+    }
+  })
+  res.json({
+    data: {
+      inCommingTxt,
+      userName
+    }
+  })
+})
+
 
 module.exports = router
