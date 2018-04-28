@@ -35,12 +35,18 @@
     - have to enable google less secure app https://myaccount.google.com/lesssecureapps
 
     - if want to decorate email, you have to inline css. So this is solution https://github.com/andrewrk/juice
-    
+
   - [jwt](https://github.com/auth0/node-jsonwebtoken)
-    
+
     - sign
-    
+
     - verify
+
+  Docker
+
+  `docker run --name some-mongo -p 27017:27017 -d mongo`
+
+  - Easy CRUD with Mongo Mongoose
 
 ## to learn more
 
