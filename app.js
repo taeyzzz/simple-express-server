@@ -3,6 +3,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors')
 var morgan = require('morgan')
+const mongoose = require('mongoose');
+
 
 var app = express();
 var server = require('http').Server(app);
@@ -12,6 +14,11 @@ var io = require('socket.io')(server);
 var userRouter = require('./router/user')
 var productRouter = require('./router/product')
 var chatRouter = require('./router/chat')
+var dbRouter = require('./router/testDB')
+
+mongoose.connect('mongodb://localhost/simple-backend');
+mongoose.Promise = global.Promise;
+
 
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack)
@@ -42,6 +49,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use("/chat", chatRouter);
 app.use("/user", userRouter);
 app.use("/product", productRouter);
+app.use("/db", dbRouter);
 
 app.get('/', function(req, res){
   res.send('hello world');
