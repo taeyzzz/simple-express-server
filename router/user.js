@@ -54,7 +54,7 @@ router.post("/access_request", function(req,res, next){
     service: 'Gmail',
       auth: {
           user: 'taeyzao@gmail.com', // Your email id
-          pass: 'taeyzazao' // Your password
+          pass: ""// Your password
       },
       tls: {
         rejectUnauthorized: false
